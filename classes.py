@@ -6,6 +6,8 @@ classes = []
 classes.append(np.array([[1,3,1,2,3],[2,5,5,2,3]]))
 classes.append(np.array([[6,6,7,8,8],[4,3,4,4,5]]))
 classes.append(np.array([[10,12,10,15,10],[11,11,13,14,12]]))
+classes.append(np.array([[1,3,1,2,3],[11,8,10,8,9]]))
+classes.append(np.array([[6,6,7,8,8],[8,10,12,7,8]]))
  
 
 
@@ -24,13 +26,17 @@ def average(numArray):
 def eculedianDistance(avg1,avg2):
 	return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
 
-def classifier(_classes,x):
+def classifier(_classes,x,limit):
 	lst = [	]
 	for i in _classes:
 		temp = {"avg":eculedianDistance( x,average(i) ),"class":i}
 		lst.append( temp)
-	lst.sort(key=lambda x: x['avg'], reverse=True)
-	print lst
+	lst.sort(key=lambda x: x['avg'], reverse=False)
+	print lst,"\n"
+	print lst[0]['avg']," : ",limit
+	if float(lst[0]['avg']) > float(limit):
+		print "the limit was passed"
+		return None
 	return lst[0]['class']
 
 
@@ -39,10 +45,11 @@ if __name__ == '__main__':
 	x = raw_input("Coordenada x: ")
 	y = raw_input("Coordenada y: ")
 	p = np.array([[int(x)],[int(y)]])
+	limit = raw_input("Limite : ")
 	#print p
 	#for _class in classes:
 	#	print eculedianDistance(p,average(_class))
-	result = classifier(classes, p)
+	result = classifier(classes, p,limit)
 	print "result belong to class {}".format(result)
 	
 	fig = plt.figure()
