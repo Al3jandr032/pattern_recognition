@@ -1,5 +1,6 @@
 import numpy as np 
 from math import sqrt,pow
+import matplotlib.pyplot as plt
 
 classes = []
 classes.append(np.array([[1,3,1,2,3],[2,5,5,2,3]]))
@@ -22,5 +23,17 @@ def average(numArray):
 
 def eculedianDistance(avg1,avg2):
 	return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+
+
+#for _class in classes:
+#	print eculedianDistance(x,average(_class))
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
 for _class in classes:
-	print eculedianDistance(x,average(_class))
+	ax.scatter(_class[0], _class[1], color='darkgreen', marker='.')
+#ax.plot(a, b, color='lightblue', linewidth=3)
+ax.set_xlim(0, 15)
+ax.set_ylim(0, 15)
+plt.show()
