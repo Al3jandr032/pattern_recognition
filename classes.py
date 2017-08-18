@@ -28,20 +28,23 @@ def eculedianDistance(avg1,avg2):
 
 def classifier(_classes,x,limit):
 	lst = [	]
+	index = 0
 	for i in _classes:
-		temp = {"avg":eculedianDistance( x,average(i) ),"class":i}
+		temp = {"avg":eculedianDistance( x,average(i) ),"class":i,"index":index}
 		lst.append( temp)
+		index += 1
 	lst.sort(key=lambda x: x['avg'], reverse=False)
 	print lst,"\n"
 	print lst[0]['avg']," : ",limit
 	if float(lst[0]['avg']) > float(limit):
 		print "the limit was passed"
 		return None
-	return lst[0]['class']
+	return 1+lst[0]['index']
 
 
 
 if __name__ == '__main__':
+	colors = ['magenta', 'black', 'blue', 'brown', 'green']
 	x = raw_input("Coordenada x: ")
 	y = raw_input("Coordenada y: ")
 	p = np.array([[int(x)],[int(y)]])
@@ -50,15 +53,26 @@ if __name__ == '__main__':
 	#for _class in classes:
 	#	print eculedianDistance(p,average(_class))
 	result = classifier(classes, p,limit)
-	print "result belong to class {}".format(result)
+	print "\n\n result belong to class {}".format(result)
 	
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
-
+	index = 0
+	label = []
+	title = []
 	for _class in classes:
-		ax.scatter(_class[0], _class[1], color='darkgreen', marker='.')
+		temp = ax.scatter(_class[0], _class[1], color=colors[index], marker='.')
+		label.append(temp)
+		title.append("clase"+str(index+1))
+		index += 1
+
 	ax.scatter( x, y, color='red', marker='^')
+	ax.legend((label),(title),scatterpoints=1,
+        loc='lower left',
+        ncol=3,
+      	fontsize=8)
 	#ax.plot(a, b, color='lightblue', linewidth=3)
 	#ax.set_xlim(0, 15)
 	#ax.set_ylim(0, 15)
+	
 	plt.show()
