@@ -6,15 +6,21 @@ class ClassGenerator(object):
 	"""docstring for ClassGenerator"""
 	def __init__(self, n,size,pos=0,disp=1):
 		super(ClassGenerator, self).__init__()
-		self.n = n
-		self.size = size
+		self.n = int(n)
+		self.size = int(size)
 		self.pos = pos
 		self.disp = disp
 		
 	def generate(self):
 		lst = []
-		for x in xrange(0,self.n):
-			lst.append(self.disp * np.random.randn(2, self.size) + self.pos)
+		for i in xrange(0,self.n):
+			d = raw_input("introduce la dispercion de la clase "+str(i)+" :")
+			x = raw_input("introduce la posicion en x de la clase "+str(i)+" :")
+			y = raw_input("introduce la posicion en y de la clase "+str(i)+" :")
+			tmp = float(d) * np.random.rand(2, self.size)
+			tmp[0] = tmp[0]+float(x)
+			tmp[0] = tmp[1]+float(y)
+			lst.append(tmp)
 		return lst
 
 class ClassHolder(object):
@@ -49,8 +55,9 @@ class ClassHolder(object):
 			lst.append( temp)
 			index += 1
 		lst.sort(key=lambda x: x['avg'], reverse=False)
-		print lst,"\n"
-		print lst[0]['avg']," : ",limit
+		for cl in lst:
+			print "clase : {} , mean : {} ".format(cl['index'],cl['avg'])
+		#print lst[0]['avg']," : ",limit
 		if float(lst[0]['avg']) > float(limit):
 			print "the limit was passed"
 			return None
@@ -62,11 +69,9 @@ class ClassHolder(object):
 		y = raw_input("Coordenada y: ")
 		p = np.array([[float(x)],[float(y)]])
 		limit = raw_input("Limite : ")
-		#print p
-		#for _class in classes:
-		#	print eculedianDistance(p,average(_class))
+		
 		result = self.classifier(p,limit)
-		print "\n\n result belong to class {}".format(result)
+		print "\n\n Result belong to class {}".format(result)
 		
 		fig = plt.figure()
 		ax = fig.add_subplot(111)
@@ -79,13 +84,13 @@ class ClassHolder(object):
 			label.append(temp)
 			title.append("clase"+str(index+1))
 			index += 1
-			cindex += 1
-			if cindex == len(colors):
+			cindex += 1			
+			if cindex == len(colors)-1:
 				cindex = 0
-
+		
 		ax.scatter( x, y, color='red', marker='^')
 		ax.legend((label),(title),scatterpoints=1,
-	        loc='lower left',
+	        loc='best',
 	        ncol=3,
 	      	fontsize=8)
 		#ax.plot(a, b, color='lightblue', linewidth=3)

@@ -2,8 +2,11 @@ import numpy as np
 from generator import ClassGenerator
 from generator import ClassHolder
 
-a = ClassGenerator(15,3)
-
+numClass = raw_input("introduce el numero de clases :")
+numPopulation = raw_input("introduce el numero de representantes :")
+a = ClassGenerator(numClass,numPopulation)
+#for i in a.generate():
+#	print i
 holder = ClassHolder(a.generate())
 holder.classify()
 """
