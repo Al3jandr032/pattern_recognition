@@ -17,9 +17,9 @@ class ClassGenerator(object):
 			d = raw_input("introduce la dispercion de la clase "+str(i)+" :")
 			x = raw_input("introduce la posicion en x de la clase "+str(i)+" :")
 			y = raw_input("introduce la posicion en y de la clase "+str(i)+" :")
-			tmp = float(d) * np.random.rand(2, self.size)
-			tmp[0] = tmp[0]+float(x)
-			tmp[0] = tmp[1]+float(y)
+			tmp =  np.random.randn(2, self.size)
+			tmp[0] = float(d)*tmp[0]+float(x)
+			tmp[1] = float(d)*tmp[1]+float(y)
 			lst.append(tmp)
 		return lst
 

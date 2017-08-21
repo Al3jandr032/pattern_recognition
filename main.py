@@ -5,8 +5,8 @@ from generator import ClassHolder
 numClass = raw_input("introduce el numero de clases :")
 numPopulation = raw_input("introduce el numero de representantes :")
 a = ClassGenerator(numClass,numPopulation)
-#for i in a.generate():
-#	print i
+#print a.generate()
+
 holder = ClassHolder(a.generate())
 holder.classify()
 """
