@@ -56,7 +56,7 @@ class ClassHolder(object):
 			index += 1
 		lst.sort(key=lambda x: x['avg'], reverse=False)
 		for cl in lst:
-			print "clase : {} , mean : {} ".format(cl['index'],cl['avg'])
+			print "clase : {} , mean : {} ".format(cl['index']+1,cl['avg'])
 		#print lst[0]['avg']," : ",limit
 		if float(lst[0]['avg']) > float(limit):
 			print "the limit was passed"
