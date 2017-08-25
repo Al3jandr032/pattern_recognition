@@ -1,30 +1,45 @@
 import numpy as np 
 from math import sqrt,pow
 import matplotlib.pyplot as plt
+from configparser import ConfigParser
 
-class ClassGenerator(object):
-	"""docstring for ClassGenerator"""
-	def __init__(self, n,size,pos=0,disp=1):
-		super(ClassGenerator, self).__init__()
-		self.n = int(n)
-		self.size = int(size)
-		self.pos = pos
-		self.disp = disp
-		
-	def generate(self):
-		lst = []
-		for i in xrange(0,self.n):
-			d = raw_input("introduce la dispercion de la clase "+str(i)+" :")
-			x = raw_input("introduce la posicion en x de la clase "+str(i)+" :")
-			y = raw_input("introduce la posicion en y de la clase "+str(i)+" :")
-			tmp =  np.random.randn(2, self.size)
-			tmp[0] = float(d)*tmp[0]+float(x)
-			tmp[1] = float(d)*tmp[1]+float(y)
-			lst.append(tmp)
-		return lst
 
 def eculedianDistance(avg1,avg2):
 		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+
+class ClassGenerator(object):
+	"""docstring for ClassGenerator"""
+	def __init__(self, n=0,size=0,config_path=None):
+		super(ClassGenerator, self).__init__()
+		self.n = int(n)
+		self.size = int(size)
+		self.path = config_path
+		
+	def generate(self):
+		lst = []
+		if self.path != None:
+			parser = ConfigParser()
+			parser.read(self.path)
+			for section_name in parser.sections():
+				d = parser.get(section_name, 'd')
+				x = parser.get(section_name, 'x')
+				y = parser.get(section_name, 'y')
+				tmp =  np.random.randn(2, self.size)
+				tmp[0] = float(d)*tmp[0]+float(x)
+				tmp[1] = float(d)*tmp[1]+float(y)
+				lst.append(tmp)
+		else:
+			for i in xrange(0,self.n):
+				d = raw_input("introduce la dispercion de la clase "+str(i)+" :")
+				x = raw_input("introduce la posicion en x de la clase "+str(i)+" :")
+				y = raw_input("introduce la posicion en y de la clase "+str(i)+" :")
+				tmp =  np.random.randn(2, self.size)
+				tmp[0] = float(d)*tmp[0]+float(x)
+				tmp[1] = float(d)*tmp[1]+float(y)
+				lst.append(tmp)
+		return lst
+
+
 
 class ClassHolder(object):
 	"""docstring for ClassHolder"""
@@ -65,14 +80,14 @@ class ClassHolder(object):
 			return None
 		return 1+lst[0]['index']
 
-	def classify(self):
+	def classify(self,type):
 		colors = ['b', 'g', 'c', 'm', 'y','k']
 		x = raw_input("Coordenada x: ")
 		y = raw_input("Coordenada y: ")
 		p = np.array([[float(x)],[float(y)]])
 		limit = raw_input("Limite : ")
 		
-		result = self.classifier(self.eculedianDistance,p,limit)
+		result = self.classifier(type,p,limit)
 		print "\n\n Result belong to class {}".format(result)
 		#figure plot logic
 		fig = plt.figure()
