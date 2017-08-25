@@ -23,6 +23,9 @@ class ClassGenerator(object):
 			lst.append(tmp)
 		return lst
 
+def eculedianDistance(avg1,avg2):
+		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+
 class ClassHolder(object):
 	"""docstring for ClassHolder"""
 	def __init__(self, classes=[]):
@@ -44,14 +47,13 @@ class ClassHolder(object):
 			index += 1
 		return res
 
-	def eculedianDistance(self,avg1,avg2):
-		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+	
 
-	def classifier(self,x,limit):
+	def classifier(self,type,x,limit):
 		lst = [	]
 		index = 0
 		for i in self.classes:
-			temp = {"avg":self.eculedianDistance( x,self.average(i) ),"class":i,"index":index}
+			temp = {"avg":type( x,self.average(i) ),"class":i,"index":index}
 			lst.append( temp)
 			index += 1
 		lst.sort(key=lambda x: x['avg'], reverse=False)
@@ -70,9 +72,9 @@ class ClassHolder(object):
 		p = np.array([[float(x)],[float(y)]])
 		limit = raw_input("Limite : ")
 		
-		result = self.classifier(p,limit)
+		result = self.classifier(self.eculedianDistance,p,limit)
 		print "\n\n Result belong to class {}".format(result)
-		
+		#figure plot logic
 		fig = plt.figure()
 		ax = fig.add_subplot(111)
 		cindex = 0

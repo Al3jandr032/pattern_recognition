@@ -7,24 +7,26 @@ from numpy.linalg import inv
 c1 = np.array([[-1.0,-1.0,0,1.0,1.0],[0,-1.0,0,0,1.0]])
 c2 = np.array([[-1.0,0],[-1.0,-1.0],[0,0],[1.0,0],[1.0,1.0]])
 x = np.array([[4],[3]])
+
 mean = np.array([[7],[2]])
 
 
 
-
-a = np.dot(c1,c2)		
-
-def variantMatrix(d,n):
+def variantMatrix(c1,c2,n):
+	d = np.dot(c1,c2)
 	for x in range(0,len(d)):
 		for i in range(0,len(d[x])):
 			d[x][i]=d[x][i]/n
 	return inv(d)
 
 
-aux = variantMatrix(a,5)		
-print aux
+a = variantMatrix(c1,c2,len(c1[0]))		
 tmp = x-mean
-print tmp
-print tmp.transpose()
-print tmp*aux*tmp.transpose()
+
+b = np.dot(a,tmp)
+
+aux1 = np.dot(tmp.transpose(),b)
+print aux1
+
+#print tmp.transpose()
 
