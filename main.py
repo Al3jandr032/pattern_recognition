@@ -2,7 +2,7 @@ import sys
 import numpy as np 
 from generator import ClassGenerator
 from generator import ClassHolder
-from generator import eculedianDistance
+import Clasifier 
 
 #numClass = raw_input("introduce el numero de clases :")
 #numPopulation = raw_input("introduce el numero de representantes :")
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 		path_file = sys.argv[2]
 		a = ClassGenerator(size=numPopulation,config_path=path_file)
 		holder = ClassHolder(a.generate())
-		holder.classify(eculedianDistance)
+		holder.classify(Clasifier.eculedianDistance)
 	else:
  		print "Filename required"
 

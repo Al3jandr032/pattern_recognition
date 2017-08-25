@@ -3,10 +3,6 @@ from math import sqrt,pow
 import matplotlib.pyplot as plt
 from configparser import ConfigParser
 
-
-def eculedianDistance(avg1,avg2):
-		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
-
 class ClassGenerator(object):
 	"""docstring for ClassGenerator"""
 	def __init__(self, n=0,size=0,config_path=None):

@@ -1,15 +1,7 @@
-import numpy as np
-from numpy.linalg import inv
+from math import sqrt,pow
 
-c1 = np.array([[1,3,1,2,3],[2,5,5,2,3]])
-#c2 = np.array([[-1,-1.4],[1,1.6],[-1,1.6],[0,-1.4],[1,-0.4]])
-
-#c1 = np.array([[-1.0,-1.0,0,1.0,1.0],[0,-1.0,0,0,1.0]])
-#c2 = np.array([[-1.0,0],[-1.0,-1.0],[0,0],[1.0,0],[1.0,1.0]])
-
-p = np.array([[4],[3]])
-
-mean = np.array([[7],[2]])
+def eculedianDistance(avg1,avg2):
+		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
 
 def average(numArray):
 		res = np.zeros( (numArray.ndim,1) )
@@ -35,16 +27,3 @@ def mahalanobis(c1,x):
 	a = covariantMatrix(c1,c2,len(c1[0]))		
 	print a
 	tmp = x-mean
-
-	b = np.dot(a,tmp)
-
-	aux1 = np.dot(tmp.transpose(),b)
-	return aux1
-
-print mahalanobis(c1,p)
-#print average(c1)
-
-
-
-#print tmp.transpose()
-
