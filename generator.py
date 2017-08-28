@@ -58,8 +58,6 @@ class ClassHolder(object):
 			index += 1
 		return res
 
-	
-
 	def classifier(self,type,x,limit):
 		lst = [	]
 		index = 0
