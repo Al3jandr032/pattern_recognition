@@ -1,7 +1,5 @@
 from math import sqrt,pow
-
-def eculedianDistance(avg1,avg2):
-		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+from numpy.linalg import inv
 
 def average(numArray):
 		res = np.zeros( (numArray.ndim,1) )
@@ -15,15 +13,32 @@ def average(numArray):
 			index += 1
 		return res
 
-def covariantMatrix(c1,c2,n):
-	d = np.dot(c1,c2)
-	for x in range(0,len(d)):
-		for i in range(0,len(d[x])):
-			d[x][i]=d[x][i]/n
-	return inv(d)
+class EculedianDistance(object):
+	"""docstring for eculedianDistance"""
+	def __init__(self):
+		super(EculedianDistance, self).__init__()
+	
+	def distance(self,avg1,avg2):
+		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+		
+class mahalanobis(object):
+	"""docstring for mahalanobis"""
+	def __init__(self):
+		super(mahalanobis, self).__init__()
+	
+	def covariantMatrix(self,c):
+		_sum=c-average(c)	
+		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
-def mahalanobis(c1,x):
-	c2 = c1.transpose()
-	a = covariantMatrix(c1,c2,len(c1[0]))		
-	print a
-	tmp = x-mean
+	def divBy(self,d,n):
+		for x in range(0,len(d)):
+			for i in range(0,len(d[x])):
+				d[x][i]=float(d[x][i])/float(n)
+		return d
+
+	def distance(self,p,c):
+		covarianza = self.covariantMatrix(c)
+		xminusAvg = p-average(c)
+		tmp = np.dot(covarianza,xminusAvg)
+		return np.dot(xminusAvg.transpose(),tmp)
+		

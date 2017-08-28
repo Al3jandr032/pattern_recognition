@@ -1,8 +1,10 @@
 import sys
+import time
 import numpy as np 
+import matplotlib.pyplot as plt
 from generator import ClassGenerator
 from generator import ClassHolder
-import Clasifier 
+from Clasifier import EculedianDistance
 
 #numClass = raw_input("introduce el numero de clases :")
 #numPopulation = raw_input("introduce el numero de representantes :")
@@ -26,7 +28,11 @@ if __name__ == '__main__':
 		path_file = sys.argv[2]
 		a = ClassGenerator(size=numPopulation,config_path=path_file)
 		holder = ClassHolder(a.generate())
-		holder.classify(Clasifier.eculedianDistance)
+		x = raw_input("Coordenada x: ")
+		y = raw_input("Coordenada y: ")
+		l = raw_input("Limite : ")
+		if holder.classify(EculedianDistance(),x,y,l):
+			plt.show()
 	else:
  		print "Filename required"
 

@@ -1,6 +1,7 @@
 import numpy as np 
 from math import sqrt,pow
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from configparser import ConfigParser
 
 class ClassGenerator(object):
@@ -10,7 +11,7 @@ class ClassGenerator(object):
 		self.n = int(n)
 		self.size = int(size)
 		self.path = config_path
-		
+
 	def generate(self):
 		lst = []
 		if self.path != None:
@@ -39,9 +40,14 @@ class ClassGenerator(object):
 
 class ClassHolder(object):
 	"""docstring for ClassHolder"""
-	def __init__(self, classes=[]):
-		super(ClassHolder, self).__init__()
+	def __init__(self, classes=[], plotfig=plt.figure()):
 		self.classes = classes
+		self.fig = plotfig
+		self.ax = self.fig.add_subplot(111)
+		self.colors = ['b', 'g', 'c', 'm', 'y','k']
+		self._x = 0
+		self._y = 0
+		
 
 	def addClass(self,_class):
 		self.classes.append(_class)
@@ -58,13 +64,16 @@ class ClassHolder(object):
 			index += 1
 		return res
 
-	def classifier(self,type,x,limit):
+	def classifier(self,classifierObject,limit):
+		x = np.array([[float(self._x)],[float(self._y)]])
 		lst = [	]
 		index = 0
+		print len(self.classes)
 		for i in self.classes:
-			temp = {"avg":type( x,self.average(i) ),"class":i,"index":index}
+			temp = {"avg":classifierObject.distance( x,self.average(i) ),"class":i,"index":index}
 			lst.append( temp)
 			index += 1
+
 		lst.sort(key=lambda x: x['avg'], reverse=False)
 		for cl in lst:
 			print "clase : {} , mean : {} ".format(cl['index']+1,cl['avg'])
@@ -73,39 +82,83 @@ class ClassHolder(object):
 			print "the limit was passed"
 			return None
 		return 1+lst[0]['index']
-
-	def classify(self,type):
-		colors = ['b', 'g', 'c', 'm', 'y','k']
-		x = raw_input("Coordenada x: ")
-		y = raw_input("Coordenada y: ")
-		p = np.array([[float(x)],[float(y)]])
-		limit = raw_input("Limite : ")
-		
-		result = self.classifier(type,p,limit)
-		print "\n\n Result belong to class {}".format(result)
-		#figure plot logic
-		fig = plt.figure()
-		ax = fig.add_subplot(111)
+		"""
+	def update(self,i):
+		print "updating {} , {}".format(self._x,self._y)
 		cindex = 0
 		index = 0
 		label = []
 		title = []
 		for _class in self.classes:
-			temp = ax.scatter(_class[0], _class[1], color=colors[cindex], marker='.')
+			temp = self.ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
 			label.append(temp)
 			title.append("clase"+str(index+1))
 			index += 1
 			cindex += 1			
-			if cindex == len(colors)-1:
+			if cindex == len(self.colors)-1:
 				cindex = 0
-		
-		ax.scatter( x, y, color='red', marker='^')
-		ax.legend((label),(title),scatterpoints=1,
+		self.ax.scatter( self._x, int(self._y)+i, color='red', marker='^')
+		self.ax.legend((label),(title),scatterpoints=1,
+	        loc='best',
+	        ncol=3,
+	      	fontsize=8)
+		plt.clf()
+		plt.cla()
+		plt.pause(0.05)
+
+	def movePoint(self,x,y):
+		self._x = x
+		self._y = y
+		cindex = 0
+		index = 0
+		label = []
+		title = []
+		for _class in self.classes:
+			temp = self.ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
+			label.append(temp)
+			title.append("clase"+str(index+1))
+			index += 1
+			cindex += 1			
+			if cindex == len(self.colors)-1:
+				cindex = 0
+		self.ax.scatter( self._x, self._y, color='red', marker='^')
+		self.ax.legend((label),(title),scatterpoints=1,
+	        loc='best',
+	        ncol=3,
+	      	fontsize=8)
+		a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
+		plt.ion()
+		plt.pause(0.05)
+	"""
+	def classify(self,classifierObject,x,y,limit):
+		self._x = x
+		self._y = y
+		result = self.classifier(classifierObject,limit)
+
+		#figure plot logic
+		cindex = 0
+		index = 0
+		label = []
+		title = []
+		for _class in self.classes:
+			temp = self.ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
+			label.append(temp)
+			title.append("clase"+str(index+1))
+			index += 1
+			cindex += 1			
+			if cindex == len(self.colors)-1:
+				cindex = 0
+		self.ax.scatter( self._x, self._y, color='red', marker='^')
+		self.ax.legend((label),(title),scatterpoints=1,
 	        loc='best',
 	        ncol=3,
 	      	fontsize=8)
 		#ax.plot(a, b, color='lightblue', linewidth=3)
 		#ax.set_xlim(0, 15)
 		#ax.set_ylim(0, 15)
+		#a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
+		return self.ax
+		#return{'belongClass':result,'label':label,'title':title}
+	
+
 		
-		plt.show()
