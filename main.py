@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-import sys
 import sys
 import time
 import numpy as np 
@@ -5,6 +7,8 @@ import matplotlib.pyplot as plt
 from generator import ClassGenerator
 from generator import ClassHolder
 from Clasifier import EculedianDistance
+from Clasifier import Mahalanobis
+from Clasifier import MaxProbability
 
 #numClass = raw_input("introduce el numero de clases :")
 #numPopulation = raw_input("introduce el numero de representantes :")

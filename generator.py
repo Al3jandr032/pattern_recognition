@@ -3,6 +3,8 @@ from math import sqrt,pow
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
+from Clasifier import MaxProbability
+
 
 class ClassGenerator(object):
 	"""docstring for ClassGenerator"""
@@ -70,15 +72,24 @@ class ClassHolder(object):
 		index = 0
 		print len(self.classes)
 		for i in self.classes:
-			temp = {"avg":classifierObject.distance( x,self.average(i) ),"class":i,"index":index}
+			temp = {"distance":classifierObject.distance( x,i ),"class":i,"index":index}
 			lst.append( temp)
 			index += 1
+		if isinstance(classifierObject, MaxProbability):
+			total = 0.0
+			for i in lst:
+				total = i['distance']
+			print total
+			"""
+			for i in lst:
+				i['distance'] = (i['distance']/total)*100
+			"""
 
-		lst.sort(key=lambda x: x['avg'], reverse=False)
+		lst.sort(key=lambda x: x['distance'], reverse=False)
 		for cl in lst:
-			print "clase : {} , mean : {} ".format(cl['index']+1,cl['avg'])
+			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 		#print lst[0]['avg']," : ",limit
-		if float(lst[0]['avg']) > float(limit):
+		if float(lst[0]['distance']) > float(limit):
 			print "the limit was passed"
 			return None
 		return 1+lst[0]['index']
