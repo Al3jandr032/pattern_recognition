@@ -1,4 +1,5 @@
 from math import sqrt,pow
+import numpy as np 
 from numpy.linalg import inv
 
 def average(numArray):
@@ -13,6 +14,7 @@ def average(numArray):
 			index += 1
 		return res
 
+
 class EculedianDistance(object):
 	"""docstring for eculedianDistance"""
 	def __init__(self):
@@ -21,10 +23,10 @@ class EculedianDistance(object):
 	def distance(self,avg1,avg2):
 		return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
 		
-class mahalanobis(object):
+class Mahalanobis(object):
 	"""docstring for mahalanobis"""
 	def __init__(self):
-		super(mahalanobis, self).__init__()
+		super(Mahalanobis, self).__init__()
 	
 	def covariantMatrix(self,c):
 		_sum=c-average(c)	
@@ -41,4 +43,35 @@ class mahalanobis(object):
 		xminusAvg = p-average(c)
 		tmp = np.dot(covarianza,xminusAvg)
 		return np.dot(xminusAvg.transpose(),tmp)
+
+class MaxProbability(object):
+	"""docstring for MaxProbability"""
+	def __init__(self, arg):
+		super(MaxProbability, self).__init__()
+		self.arg = arg
+
+	def covariantMatrix(self,c):
+		_sum=c-average(c)	
+		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
+
+	def divBy(self,d,n):
+		for x in range(0,len(d)):
+			for i in range(0,len(d[x])):
+				d[x][i]=float(d[x][i])/float(n)
+		return d
+
+	def divBy2(self,d,n):
+		for x in range(0,len(d)):
+			for i in range(0,len(d[x])):
+				d[x][i]=-1*float(d[x][i])/2
+		return d
+
+	def distance(self,p,c):
+		covarianza = self.covariantMatrix(c)
+		a = np.exp(self.divBy2(covarianza,len(covarianza[0])))
+		#b = 
+
+
+
+		
 		

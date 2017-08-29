@@ -9,7 +9,9 @@ from matplotlib.figure import Figure
 from generator import ClassGenerator
 from generator import ClassHolder
 from Clasifier import EculedianDistance
+from Clasifier import Mahalanobis
 
+classifiers = [EculedianDistance(),Mahalanobis()]
 
 class MyWindow(Gtk.Window):
 
@@ -41,9 +43,9 @@ class MyWindow(Gtk.Window):
         box.add(button1)
 
         name_store = Gtk.ListStore(int, str)
-        name_store.append([1, "euclidean distance"])
-        name_store.append([2, "mahalanobis distance"])
-        name_store.append([3, "Max probability"])
+        name_store.append([1, "Eculedian"])
+        name_store.append([2, "Mahalanobis"])
+        name_store.append([3, "MaxProbability"])
     
 
         name_combo = Gtk.ComboBox.new_with_model_and_entry(name_store)
@@ -155,7 +157,7 @@ class MyWindow(Gtk.Window):
 
         a = ClassGenerator(size=100,config_path=self.filePath)
         holder = ClassHolder(a.generate(),plotfig=self.f)
-        plot = holder.classify(EculedianDistance(),x,y,l) 
+        plot = holder.classify(classifiers[self.Classifier['index']],x,y,l) 
         if plot != None:
             print plot
 

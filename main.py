@@ -31,7 +31,7 @@ if __name__ == '__main__':
 		x = raw_input("Coordenada x: ")
 		y = raw_input("Coordenada y: ")
 		l = raw_input("Limite : ")
-		if holder.classify(EculedianDistance(),x,y,l):
+		if holder.classify(MaxProbability(),x,y,l):
 			plt.show()
 	else:
  		print "Filename required"
