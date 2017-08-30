@@ -1,32 +1,52 @@
 import numpy as np
 from numpy.linalg import inv
 
-#c1 = np.array([[-1,1,-1,0,1],[-1.4,1.6,1.6,-1.4,-0.4]])
-#c2 = np.array([[-1,-1.4],[1,1.6],[-1,1.6],[0,-1.4],[1,-0.4]])
+def average(numArray):
+		res = np.zeros( (len(numArray),1) )
+		index = 0
+		for dim in numArray:
+			avg = 0.0
+			for element in dim:
+				avg += element
+			avg = avg/dim.size
+			res[index] = avg
+			index += 1
+		return res
 
-c1 = np.array([[-1.0,-1.0,0,1.0,1.0],[0,-1.0,0,0,1.0]])
-c2 = np.array([[-1.0,0],[-1.0,-1.0],[0,0],[1.0,0],[1.0,1.0]])
-x = np.array([[4],[3]])
+def covariantMatrix(c):
+	_sum=c-average(c)	
+	return divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
-mean = np.array([[7],[2]])
-
-
-
-def variantMatrix(c1,c2,n):
-	d = np.dot(c1,c2)
+def divBy(d,n):
 	for x in range(0,len(d)):
 		for i in range(0,len(d[x])):
-			d[x][i]=d[x][i]/n
-	return inv(d)
+			d[x][i]=float(d[x][i])/float(n)
+	return d
+
+def mahalanobis(p,c):
+	covarianza = covariantMatrix(c)
+	xminusAvg = p-average(c)
+	tmp = np.dot(covarianza,xminusAvg)
+	return np.dot(xminusAvg.transpose(),tmp)
 
 
-a = variantMatrix(c1,c2,len(c1[0]))		
-tmp = x-mean
+#c1 = np.array([[1.0,3.0,1.0,2.0,3.0],[2.0,5.0,5.0,2.0,3.0]])
+#c2 = np.array([[6.0,6.0,7.0,8.0,8.0],[4.0,3.0,4.0,4.0,5.0]])
 
-b = np.dot(a,tmp)
+#c1 = np.array([[-1.0,-1.0,0,1.0,1.0],[0,-1.0,0,0,1.0]])
+#c2 = np.array([[-1.0,0],[-1.0,-1.0],[0,0],[1.0,0],[1.0,1.0]])
 
-aux1 = np.dot(tmp.transpose(),b)
-print aux1
+c1 = np.array([[0,1.0,1.0,1.0],[0,0,1.0,0],[0,0,0,1.0]])
+c2 = np.array([[0,1.0,0,0],[1.0,1.0,1.0,0],[0,1.0,1.0,1.0]])
+p = np.array([[4],[5],[0]])
+print mahalanobis(p,c2)
+"""
+_sum=c2-average(c2)	
+covarianza = divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
+xminusAvg = p-average(c2)
 
-#print tmp.transpose()
+tmp = np.dot(covarianza,xminusAvg)
+print np.dot(xminusAvg.transpose(),tmp)
+"""
+
 
