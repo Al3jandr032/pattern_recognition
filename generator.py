@@ -86,12 +86,13 @@ class ClassHolder(object):
 			lst.sort(key=lambda x: x['distance'], reverse=True	)
 		else:
 			lst.sort(key=lambda x: x['distance'], reverse=False	)
+			if float(lst[0]['distance']) > float(limit):
+				print "the limit was passed"
+				return None
 		for cl in lst:
 			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 		#print lst[0]['avg']," : ",limit
-		if float(lst[0]['distance']) > float(limit):
-			print "the limit was passed"
-			return None
+		
 		return 1+lst[0]['index']
 		"""
 	def update(self,i):

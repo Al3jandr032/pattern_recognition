@@ -10,8 +10,9 @@ from generator import ClassGenerator
 from generator import ClassHolder
 from Clasifier import EculedianDistance
 from Clasifier import Mahalanobis
+from Clasifier import MaxProbability
 
-classifiers = [EculedianDistance(),Mahalanobis()]
+classifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]
 
 class MyWindow(Gtk.Window):
 
@@ -43,9 +44,9 @@ class MyWindow(Gtk.Window):
         box.add(button1)
 
         name_store = Gtk.ListStore(int, str)
-        name_store.append([1, "Eculedian"])
-        name_store.append([2, "Mahalanobis"])
-        name_store.append([3, "MaxProbability"])
+        name_store.append([0, "Eculedian"])
+        name_store.append([1, "Mahalanobis"])
+        name_store.append([2, "MaxProbability"])
     
 
         name_combo = Gtk.ComboBox.new_with_model_and_entry(name_store)
@@ -159,7 +160,8 @@ class MyWindow(Gtk.Window):
         holder = ClassHolder(a.generate(),plotfig=self.f)
         plot = holder.classify(classifiers[self.Classifier['index']],x,y,l) 
         if plot != None:
-            print plot
+            #print plot
+            plot.show()
 
 
 widget = Gtk.Box()
