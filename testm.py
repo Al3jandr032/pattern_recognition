@@ -34,8 +34,8 @@ if __name__ == '__main__':
 		holder = ClassHolder(a.generate())
 		x = raw_input("Coordenada x: ")
 		y = raw_input("Coordenada y: ")
-		#l = raw_input("Limite : ")
-		if holder.classify(MaxProbability(),x,y,100):
+		l = raw_input("Limite : ")
+		if holder.classify(Mahalanobis(),x,y,l):
 			plt.show()
 	else:
  		print "Filename required"

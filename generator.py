@@ -79,7 +79,7 @@ class ClassHolder(object):
 			total = 0.0
 			for i in lst:
 				total += i['distance']
-			print total
+			#print total
 			
 			for i in lst:
 				i['distance'] = (i['distance']/total)*100
@@ -146,7 +146,8 @@ class ClassHolder(object):
 		self._x = x
 		self._y = y
 		result = self.classifier(classifierObject,limit)
-
+		if result != None:
+			print "pertenece a la clase : {} ".format(result)
 		#figure plot logic
 		cindex = 0
 		index = 0
