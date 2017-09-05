@@ -17,7 +17,7 @@ holder = ClassHolder(a.generate())
 x = 4
 y = 5
 l = 20
-if holder.classify(KNN(3,0),x,y,l):
+if holder.classify(KNN(19,0),x,y,l):
 	#plt.show()
 	pass
 	

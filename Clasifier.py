@@ -23,6 +23,9 @@ class EculedianDistance(object):
 	def distance(self,x,c):
 		avg = average(c)
 		return sqrt(pow(x[0]-avg[0],2)+pow(x[1]-avg[1],2))
+
+	def distanceToPoint(self,x,c):
+		return sqrt(pow(x[0]-c[0],2)+pow(x[1]-c[1],2))
 		
 class Mahalanobis(object):
 	"""docstring for mahalanobis"""
@@ -88,8 +91,28 @@ class KNN(object):
 		self.index = index
 
 	def distance(self,x,_classes):
+		print "knn-distance type of x: ",type(x)
 		lst = [	]
 		index = 0
+		
+		for cl in range(0,len(_classes)):
+			for dim in range(0,_classes[cl].size/_classes[cl].ndim):
+				p = np.array([[_classes[cl][0][dim]],[_classes[cl][1][dim]]])
+				#print p
+				temp = {"distance":self.clasifiers[self.index].distanceToPoint( x,p ),"class":cl,"index":index}
+				lst.append( temp)
+				index += 1
+		lst.sort(key=lambda x: x['distance'], reverse=False	)
+		knn = lst[:self.k]
+		result = {}
+		for cl in knn:
+			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
+			result[cl['class']+1] = 0
+		for cl in knn:
+			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
+			result[cl['class']+1] += 1
+		print result
+		"""	
 		for i in _classes:
 			temp = {"distance":self.clasifiers[self.index].distance( x,i ),"class":i,"index":index}
 			lst.append( temp)
@@ -115,3 +138,5 @@ class KNN(object):
 		#print lst[0]['avg']," : ",limit
 		print "return : ",1+lst[0]['index']
 		return 1+lst[0]['index']
+		"""
+		return 1
