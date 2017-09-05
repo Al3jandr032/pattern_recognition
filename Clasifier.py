@@ -79,5 +79,39 @@ class MaxProbability(object):
 		return d
 
 
+class KNN(object):
+	
+	def __init__(self,k , index):
+		super(KNN, self).__init__()
+		self.k = k
+		self.clasifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]
+		self.index = index
+
+	def distance(self,x,_classes):
+		lst = [	]
+		index = 0
+		for i in _classes:
+			temp = {"distance":self.clasifiers[self.index].distance( x,i ),"class":i,"index":index}
+			lst.append( temp)
+			index += 1
+		
+		lst.sort(key=lambda x: x['distance'], reverse=False	)
 		
 		
+
+		#for cl in lst:
+		#	print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
+		knn = lst[:self.k]
+		result = {}
+		for cl in knn:
+			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
+			result[cl['index']+1] = 0
+
+		for cl in knn:
+			result[cl['index']+1] += 1
+
+		print result
+
+		#print lst[0]['avg']," : ",limit
+		print "return : ",1+lst[0]['index']
+		return 1+lst[0]['index']

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
 from Clasifier import MaxProbability
+from Clasifier import KNN
 
 
 class ClassGenerator(object):
@@ -66,29 +67,34 @@ class ClassHolder(object):
 			index += 1
 		return res
 
+	""" compara un vector para determinar a que clase pertence"""
 	def classifier(self,classifierObject,limit):
 		x = np.array([[float(self._x)],[float(self._y)]])
 		lst = [	]
 		index = 0
 		print len(self.classes)
-		for i in self.classes:
-			temp = {"distance":classifierObject.distance( x,i ),"class":i,"index":index}
-			lst.append( temp)
-			index += 1
-		if isinstance(classifierObject, MaxProbability):
-			total = 0.0
-			for i in lst:
-				total += i['distance']
-			#print total
-			
-			for i in lst:
-				i['distance'] = (i['distance']/total)*100
-			lst.sort(key=lambda x: x['distance'], reverse=True	)
+		if isinstance(classifierObject, KNN):
+			return classifierObject.distance( x,self.classes)
 		else:
-			lst.sort(key=lambda x: x['distance'], reverse=False	)
-			if float(lst[0]['distance']) > float(limit):
-				print "the limit was passed"
-				return None
+			for i in self.classes:
+				temp = {"distance":classifierObject.distance( x,i ),"class":i,"index":index}
+				lst.append( temp)
+				index += 1
+			if isinstance(classifierObject, MaxProbability):
+				total = 0.0
+				for i in lst:
+					total += i['distance']
+				#print total
+				
+				for i in lst:
+					i['distance'] = (i['distance']/total)*100
+				lst.sort(key=lambda x: x['distance'], reverse=True	)
+			else:
+				lst.sort(key=lambda x: x['distance'], reverse=False	)
+				if float(lst[0]['distance']) > float(limit):
+					print "the limit was passed"
+					return None
+
 		for cl in lst:
 			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 		#print lst[0]['avg']," : ",limit
