@@ -10,14 +10,13 @@ from Clasifier import EculedianDistance
 from Clasifier import KNN
 
 
-numPopulation=100	
+numPopulation=100
 path_file="clases.ini"
 a = ClassGenerator(size=numPopulation,config_path=path_file)
 holder = ClassHolder(a.generate())
-x = 4
-y = 5
+x = raw_input("Coordenada x: ")
+y = raw_input("Coordenada y: ")
 l = 20
-if holder.classify(KNN(19,0),x,y,l):
-	#plt.show()
-	pass
-	
+if holder.classify(KNN(150,1),x,y,l):
+	plt.show()
+	#pass

@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 from math import sqrt,pow,pi,exp
 from numpy.linalg import inv,det
 
@@ -19,21 +19,21 @@ class EculedianDistance(object):
 	"""docstring for eculedianDistance"""
 	def __init__(self):
 		super(EculedianDistance, self).__init__()
-	
+
 	def distance(self,x,c):
 		avg = average(c)
 		return sqrt(pow(x[0]-avg[0],2)+pow(x[1]-avg[1],2))
 
-	def distanceToPoint(self,x,c):
+	def distanceToPoint(self,x,c,_class=None):
 		return sqrt(pow(x[0]-c[0],2)+pow(x[1]-c[1],2))
-		
+
 class Mahalanobis(object):
 	"""docstring for mahalanobis"""
 	def __init__(self):
 		super(Mahalanobis, self).__init__()
-	
+
 	def covariantMatrix(self,c):
-		_sum=c-average(c)	
+		_sum=c-average(c)
 		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
 	def divBy(self,d,n):
@@ -48,13 +48,19 @@ class Mahalanobis(object):
 		tmp = np.dot(covarianza,xminusAvg)
 		return np.dot(xminusAvg.transpose(),tmp)
 
+	def distanceToPoint(self,p,c,_class):
+		covarianza = self.covariantMatrix(_class)
+		xminusAvg = p-c
+		tmp = np.dot(covarianza,xminusAvg)
+		return np.dot(xminusAvg.transpose(),tmp)
+
 class MaxProbability(object):
 	"""docstring for MaxProbability"""
 	def __init__(self):
 		super(MaxProbability, self).__init__()
-	
+
 	def covariantMatrix(self,c):
-		_sum=c-average(c)	
+		_sum=c-average(c)
 		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
 	def divBy(self,d,n):
@@ -83,12 +89,17 @@ class MaxProbability(object):
 
 
 class KNN(object):
-	
+
 	def __init__(self,k , index):
 		super(KNN, self).__init__()
 		self.k = k
 		self.clasifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]
 		self.index = index
+
+	def keywithmaxval(self,d):
+	     	v=list(d.values())
+     		k=list(d.keys())
+	     	return k[v.index(max(v))]
 
 	def distance(self,x,_classes):
 		print "knn-distance type of x: ",type(x)
@@ -99,11 +110,12 @@ class KNN(object):
 			for dim in range(0,_classes[cl].size/_classes[cl].ndim):
 				p = np.array([[_classes[cl][0][dim]],[_classes[cl][1][dim]]])
 				#print p
-				temp = {"distance":self.clasifiers[self.index].distanceToPoint( x,p ),"class":cl,"index":index}
+				temp = {"distance":self.clasifiers[self.index].distanceToPoint( x,p,_classes[cl]),"class":cl,"index":index}
 				lst.append( temp)
 				index += 1
 		lst.sort(key=lambda x: x['distance'], reverse=False	)
 		knn = lst[:self.k]
+
 		result = {}
 		for cl in knn:
 			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
@@ -111,32 +123,8 @@ class KNN(object):
 		for cl in knn:
 			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 			result[cl['class']+1] += 1
-		print result
-		"""	
-		for i in _classes:
-			temp = {"distance":self.clasifiers[self.index].distance( x,i ),"class":i,"index":index}
-			lst.append( temp)
-			index += 1
+		for key, value in result.iteritems():
+			print "key : {} , value : {}".format(key,value)
+
 		
-		lst.sort(key=lambda x: x['distance'], reverse=False	)
-		
-		
-
-		#for cl in lst:
-		#	print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
-		knn = lst[:self.k]
-		result = {}
-		for cl in knn:
-			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
-			result[cl['index']+1] = 0
-
-		for cl in knn:
-			result[cl['index']+1] += 1
-
-		print result
-
-		#print lst[0]['avg']," : ",limit
-		print "return : ",1+lst[0]['index']
-		return 1+lst[0]['index']
-		"""
-		return 1
+		return self.keywithmaxval(result)
