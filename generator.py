@@ -1,5 +1,6 @@
 import numpy as np 
 from math import sqrt,pow
+import random
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
@@ -54,7 +55,32 @@ class ClassHolder(object):
 
 	def addClass(self,_class):
 		self.classes.append(_class)
+
+	def getClass(self,x):
+		if x < len(self.classes):
+			return self.classes[x]
+		return None
+
+
+	def getSample(self,cl):
+		index = []
+		while (len(index)<len(self.classes[cl][0])/2):
+			tmp = random.randint(0,len(self.classes[cl][0])-1)
+			if tmp not in index:
+ 				index.append(tmp)
+ 		return index
 	
+	def getElements(self,x,num=False):
+		if num == False:
+			for dim in range(0,self.classes[x][0].size/self.classes[x][0].ndim):
+				print self.classes[x][0][dim],",",self.classes[x][1][dim]
+		elif num == True:
+			for dim in self.getSample(x):
+				print self.classes[x][0][dim],",",self.classes[x][1][dim]
+	
+
+				
+				
 	def average(self,numArray):
 		res = np.zeros( (numArray.ndim,1) )
 		index = 0
@@ -100,54 +126,7 @@ class ClassHolder(object):
 		#print lst[0]['avg']," : ",limit
 		
 		return 1+lst[0]['index']
-		"""
-	def update(self,i):
-		print "updating {} , {}".format(self._x,self._y)
-		cindex = 0
-		index = 0
-		label = []
-		title = []
-		for _class in self.classes:
-			temp = self.ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
-			label.append(temp)
-			title.append("clase"+str(index+1))
-			index += 1
-			cindex += 1			
-			if cindex == len(self.colors)-1:
-				cindex = 0
-		self.ax.scatter( self._x, int(self._y)+i, color='red', marker='^')
-		self.ax.legend((label),(title),scatterpoints=1,
-	        loc='best',
-	        ncol=3,
-	      	fontsize=8)
-		plt.clf()
-		plt.cla()
-		plt.pause(0.05)
 
-	def movePoint(self,x,y):
-		self._x = x
-		self._y = y
-		cindex = 0
-		index = 0
-		label = []
-		title = []
-		for _class in self.classes:
-			temp = self.ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
-			label.append(temp)
-			title.append("clase"+str(index+1))
-			index += 1
-			cindex += 1			
-			if cindex == len(self.colors)-1:
-				cindex = 0
-		self.ax.scatter( self._x, self._y, color='red', marker='^')
-		self.ax.legend((label),(title),scatterpoints=1,
-	        loc='best',
-	        ncol=3,
-	      	fontsize=8)
-		a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
-		plt.ion()
-		plt.pause(0.05)
-	"""
 	def classify(self,classifierObject,x,y,limit):
 		self._x = x
 		self._y = y
@@ -178,6 +157,3 @@ class ClassHolder(object):
 		#a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
 		return self.ax
 		#return{'belongClass':result,'label':label,'title':title}
-	
-
-		
