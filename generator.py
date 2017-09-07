@@ -40,8 +40,6 @@ class ClassGenerator(object):
 				lst.append(tmp)
 		return lst
 
-
-
 class ClassHolder(object):
 	"""docstring for ClassHolder"""
 	def __init__(self, classes=[], plotfig=plt.figure()):
@@ -51,7 +49,8 @@ class ClassHolder(object):
 		self.colors = ['b', 'g', 'c', 'm', 'y','k']
 		self._x = 0
 		self._y = 0
-		
+	def closeFigure(self):
+		plt.close(self.fig)
 
 	def addClass(self,_class):
 		self.classes.append(_class)
@@ -77,10 +76,7 @@ class ClassHolder(object):
 		elif num == True:
 			for dim in self.getSample(x):
 				print self.classes[x][0][dim],",",self.classes[x][1][dim]
-	
-
-				
-				
+					
 	def average(self,numArray):
 		res = np.zeros( (numArray.ndim,1) )
 		index = 0
@@ -126,6 +122,34 @@ class ClassHolder(object):
 		#print lst[0]['avg']," : ",limit
 		
 		return 1+lst[0]['index']
+
+	def plot(self,x=None,y=None):
+		#figure plot logic
+		figplot = plt.figure()
+		ax = figplot.add_subplot(111)
+		cindex = 0
+		index = 0
+		label = []
+		title = []
+		for _class in self.classes:
+			temp = ax.scatter(_class[0], _class[1], color=self.colors[cindex], marker='.')
+			label.append(temp)
+			title.append("clase"+str(index+1))
+			index += 1
+			cindex += 1			
+			if cindex == len(self.colors)-1:
+				cindex = 0
+		if (x != None and y != None):
+			ax.scatter( self._x, self._y, color='red', marker='^')
+		ax.legend((label),(title),scatterpoints=1,
+	        loc='best',
+	        ncol=3,
+	      	fontsize=8)
+		#ax.plot(a, b, color='lightblue', linewidth=3)
+		#ax.set_xlim(0, 15)
+		#ax.set_ylim(0, 15)
+		#a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
+		figplot.show()
 
 	def classify(self,classifierObject,x,y,limit):
 		self._x = x
