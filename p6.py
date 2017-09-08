@@ -20,7 +20,7 @@ if __name__ == '__main__':
 		numOfClases = holder.getNumClasses()
 		print "number of clases : ",numOfClases
 		v = Validator(holder, int(sys.argv[3]) )
-		
+		preformance = []
 		rest_matrix = []
 		for i in range(0,numOfClases):
 			rest_matrix.append(v.check(i,False))
@@ -30,6 +30,7 @@ if __name__ == '__main__':
 			print rest_matrix[i]
 			average += rest_matrix[i][i+1]
 		tmp = (average*100)/(numPopulation*numOfClases)
+		preformance.append(tmp)
 		print "restit method result : {}".format(tmp)
 
 	
@@ -46,8 +47,12 @@ if __name__ == '__main__':
 			tmp = (average*100)/((numPopulation*numOfClases)/2)
 			print tmp
 			cross_total += tmp
-
+		preformance.append(cross_total/20)
 		print "cross method result : {}".format(cross_total/20)
+		_total = 0.0
+		for x in preformance:
+			_total += x
+		print "El performance total es : {}".format(_total/len(preformance))
 	
 	else:
  		print "Filename required"
