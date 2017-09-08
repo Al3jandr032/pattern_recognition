@@ -52,7 +52,7 @@ if __name__ == '__main__':
 		_total = 0.0
 		for x in preformance:
 			_total += x
-		print "El performance total es : {}".format(_total/len(preformance))
+		print "El performance total es : {}".format(_total/len(performance))
 	
 	else:
  		print "Filename required"
