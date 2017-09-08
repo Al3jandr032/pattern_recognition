@@ -90,7 +90,7 @@ class MaxProbability(object):
 
 class KNN(object):
 
-	def __init__(self,k , index):
+	def __init__(self,k=3, index=0):
 		super(KNN, self).__init__()
 		self.k = k
 		self.clasifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]

@@ -4,6 +4,8 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
+from Clasifier import EculedianDistance
+from Clasifier import Mahalanobis
 from Clasifier import MaxProbability
 from Clasifier import KNN
 
@@ -49,17 +51,24 @@ class ClassHolder(object):
 		self.colors = ['b', 'g', 'c', 'm', 'y','k']
 		self._x = 0
 		self._y = 0
+
+	def setPoint(self,x,y):
+		self._x = x
+		self._y = y
+
 	def closeFigure(self):
 		plt.close(self.fig)
 
 	def addClass(self,_class):
 		self.classes.append(_class)
 
+	def getNumClasses(self):
+		return len(self.classes)
+
 	def getClass(self,x):
 		if x < len(self.classes):
 			return self.classes[x]
 		return None
-
 
 	def getSample(self,cl):
 		index = []
@@ -70,12 +79,15 @@ class ClassHolder(object):
  		return index
 	
 	def getElements(self,x,num=False):
+		lst = []
+		point = {}
 		if num == False:
 			for dim in range(0,self.classes[x][0].size/self.classes[x][0].ndim):
-				print self.classes[x][0][dim],",",self.classes[x][1][dim]
+				lst.append({'x':self.classes[x][0][dim],'y':self.classes[x][1][dim]})
 		elif num == True:
 			for dim in self.getSample(x):
-				print self.classes[x][0][dim],",",self.classes[x][1][dim]
+				lst.append({'x':self.classes[x][0][dim],'y':self.classes[x][1][dim]})
+		return lst
 					
 	def average(self,numArray):
 		res = np.zeros( (numArray.ndim,1) )
@@ -94,7 +106,7 @@ class ClassHolder(object):
 		x = np.array([[float(self._x)],[float(self._y)]])
 		lst = [	]
 		index = 0
-		print len(self.classes)
+		#print len(self.classes)
 		if isinstance(classifierObject, KNN):
 			return classifierObject.distance( x,self.classes)
 		else:
@@ -117,8 +129,8 @@ class ClassHolder(object):
 					print "the limit was passed"
 					return None
 
-		for cl in lst:
-			print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
+		#for cl in lst:
+		#	print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 		#print lst[0]['avg']," : ",limit
 		
 		return 1+lst[0]['index']
@@ -181,3 +193,26 @@ class ClassHolder(object):
 		#a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
 		return self.ax
 		#return{'belongClass':result,'label':label,'title':title}
+
+class Validator(object):
+	"""docstring for Validator"""
+	def __init__(self, holder, index):
+		super(Validator, self).__init__()
+		self.holder = holder
+		self.classifiers =  [EculedianDistance(),Mahalanobis(),MaxProbability(),KNN()]
+		self.index = index
+
+	def sample(self,index,type=False):
+		return self.holder.getElements(index,type)
+
+	def check(self,index,type=False,limit=25):
+		#print 
+		votes = {}
+		for i in range(1,self.holder.getNumClasses()+1):
+			votes[i] = 0
+		for x in self.sample(index,False):
+			self.holder.setPoint(x['x'],x['y'])
+			result = self.holder.classifier(self.classifiers[self.index],limit)
+			if result != None:
+				votes[result] += 1
+		return votes
