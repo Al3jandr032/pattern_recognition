@@ -102,7 +102,7 @@ class KNN(object):
 	     	return k[v.index(max(v))]
 
 	def distance(self,x,_classes):
-		print "knn-distance type of x: ",type(x)
+		#print "knn-distance type of x: ",type(x)
 		lst = [	]
 		index = 0
 		
@@ -123,8 +123,9 @@ class KNN(object):
 		for cl in knn:
 			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 			result[cl['class']+1] += 1
+		"""
 		for key, value in result.iteritems():
 			print "key : {} , value : {}".format(key,value)
-
+		"""
 		
 		return self.keywithmaxval(result)

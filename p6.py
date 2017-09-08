@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-import sys
+import sys
 import numpy as np 
 from math import sqrt,pow,pi,exp
 from numpy.linalg import inv,det
@@ -10,19 +11,46 @@ from generator import Validator
 from Clasifier import EculedianDistance
 from Clasifier import KNN
 
+if __name__ == '__main__':
+	if len(sys.argv) > 1:
+		numPopulation = int(sys.argv[1])
+		path_file = sys.argv[2]
+		a = ClassGenerator(size=int(numPopulation),config_path=path_file)
+		holder = ClassHolder(a.generate())
+		numOfClases = holder.getNumClasses()
+		print "number of clases : ",numOfClases
+		v = Validator(holder, int(sys.argv[3]) )
+		
+		rest_matrix = []
+		for i in range(0,numOfClases):
+			rest_matrix.append(v.check(i,False))
 
-numPopulation=100
-path_file="clases.ini"
-a = ClassGenerator(size=numPopulation,config_path=path_file)
-holder = ClassHolder(a.generate())
-#x = raw_input("Coordenada x: ")
-#y = raw_input("Coordenada y: ")
-v = Validator(holder,0)
-l = 20
-for i in range(0,4):
-	print v.check(i,True)
-for i in range(0,4):
-	print v.check(i,False)
+		average = 0.0
+		for i in range(0,numOfClases):
+			print rest_matrix[i]
+			average += rest_matrix[i][i+1]
+		tmp = (average*100)/(numPopulation*numOfClases)
+		print "restit method result : {}".format(tmp)
+
+	
+		cross_total = 0.0
+		for times in range(0,20):
+			matrix = []
+			for i in range(0,numOfClases):
+				matrix.append(v.check(i,True))
+
+			average = 0.0
+			for i in range(0,numOfClases):
+				print matrix[i]
+				average += matrix[i][i+1]
+			tmp = (average*100)/((numPopulation*numOfClases)/2)
+			print tmp
+			cross_total += tmp
+
+		print "cross method result : {}".format(cross_total/20)
+	
+	else:
+ 		print "Filename required"
 
 #if holder.classify(KNN(150,1),x,y,l):
 #	plt.show()

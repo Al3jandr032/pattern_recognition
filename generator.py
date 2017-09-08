@@ -125,9 +125,10 @@ class ClassHolder(object):
 				lst.sort(key=lambda x: x['distance'], reverse=True	)
 			else:
 				lst.sort(key=lambda x: x['distance'], reverse=False	)
-				if float(lst[0]['distance']) > float(limit):
-					print "the limit was passed"
-					return None
+				if int(limit) != -1:
+					if float(lst[0]['distance']) > float(limit):
+						print "the limit was passed"
+						return None
 
 		#for cl in lst:
 		#	print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
@@ -205,12 +206,12 @@ class Validator(object):
 	def sample(self,index,type=False):
 		return self.holder.getElements(index,type)
 
-	def check(self,index,type=False,limit=25):
+	def check(self,index,type=False,limit=-1):
 		#print 
 		votes = {}
 		for i in range(1,self.holder.getNumClasses()+1):
 			votes[i] = 0
-		for x in self.sample(index,False):
+		for x in self.sample(index,type):
 			self.holder.setPoint(x['x'],x['y'])
 			result = self.holder.classifier(self.classifiers[self.index],limit)
 			if result != None:
