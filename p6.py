@@ -19,9 +19,11 @@ if __name__ == '__main__':
 		holder = ClassHolder(a.generate())
 		numOfClases = holder.getNumClasses()
 		print "number of clases : ",numOfClases
+
 		v = Validator(holder, int(sys.argv[3]) )
 		preformance = []
 		rest_matrix = []
+		""" rest  """
 		for i in range(0,numOfClases):
 			rest_matrix.append(v.check(i,False))
 
@@ -33,7 +35,7 @@ if __name__ == '__main__':
 		preformance.append(tmp)
 		print "restit method result : {}".format(tmp)
 
-	
+		""" cross validation random """
 		cross_total = 0.0
 		for times in range(0,20):
 			matrix = []
@@ -52,8 +54,9 @@ if __name__ == '__main__':
 		_total = 0.0
 		for x in preformance:
 			_total += x
-		print "El performance total es : {}".format(_total/len(performance))
-	
+		print "El performance total es : {}".format(_total/len(preformance))
+		
+		"""  leave one out """
 	else:
  		print "Filename required"
 

@@ -77,6 +77,9 @@ class ClassHolder(object):
 			if tmp not in index:
  				index.append(tmp)
  		return index
+
+ 	def getElement(self,cl,n):
+ 		return {'x':self.classes[cl][0][n],'y':self.classes[cl][1][n]}
 	
 	def getElements(self,x,num=False):
 		lst = []
@@ -203,17 +206,29 @@ class Validator(object):
 		self.classifiers =  [EculedianDistance(),Mahalanobis(),MaxProbability(),KNN()]
 		self.index = index
 
-	def sample(self,index,type=False):
-		return self.holder.getElements(index,type)
+	def sample(self,index,type=False,cl=None):
+		if type != None:
+			return self.holder.getElements(index,type)
+		else:
+			return self.holder.getElement(index,cl)
+
 
 	def check(self,index,type=False,limit=-1):
 		#print 
 		votes = {}
 		for i in range(1,self.holder.getNumClasses()+1):
 			votes[i] = 0
-		for x in self.sample(index,type):
-			self.holder.setPoint(x['x'],x['y'])
-			result = self.holder.classifier(self.classifiers[self.index],limit)
-			if result != None:
-				votes[result] += 1
-		return votes
+		if type != None:
+			for x in self.sample(index,type):
+				self.holder.setPoint(x['x'],x['y'])
+				result = self.holder.classifier(self.classifiers[self.index],limit)
+				if result != None:
+					votes[result] += 1
+			return votes
+		else:
+			pass
+			"""  
+				iterate over all class to count votes
+				implement getNumElements(Class) in order to use it in a for loop
+				use the same structure that if clause
+			"""
