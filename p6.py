@@ -21,7 +21,7 @@ if __name__ == '__main__':
 		print "number of clases : ",numOfClases
 
 		v = Validator(holder, int(sys.argv[3]) )
-		preformance = []
+		performance = []
 		rest_matrix = []
 		""" rest  """
 		for i in range(0,numOfClases):
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 			print rest_matrix[i]
 			average += rest_matrix[i][i+1]
 		tmp = (average*100)/(numPopulation*numOfClases)
-		preformance.append(tmp)
+		performance.append(tmp)
 		print "restit method result : {}".format(tmp)
 
 		""" cross validation random """
@@ -49,15 +49,28 @@ if __name__ == '__main__':
 			tmp = (average*100)/((numPopulation*numOfClases)/2)
 			print tmp
 			cross_total += tmp
-		preformance.append(cross_total/20)
+		performance.append(cross_total/20)
 		print "cross method result : {}".format(cross_total/20)
-		_total = 0.0
-		for x in preformance:
-			_total += x
-		print "El performance total es : {}".format(_total/len(preformance))
+		
 		
 		"""  leave one out """
+		for i in range(0,numOfClases):
+			rest_matrix.append(v.check(i,None))
+
+		average = 0.0
+		for i in range(0,numOfClases):
+			print rest_matrix[i]
+			average += rest_matrix[i][i+1]
+		tmp = (average*100)/(numPopulation*numOfClases)
+		performance.append(tmp)
+		print "leave one out method result : {}".format(tmp)
+		print performance
+		_total = 0.0
+		for x in performance:
+			_total += x
+		print "El performance total es : {}".format(_total/len(performance))
 	else:
+		print "use scritp.py population  filepath Classifier"
  		print "Filename required"
 
 #if holder.classify(KNN(150,1),x,y,l):

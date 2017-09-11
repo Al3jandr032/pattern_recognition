@@ -80,6 +80,9 @@ class ClassHolder(object):
 
  	def getElement(self,cl,n):
  		return {'x':self.classes[cl][0][n],'y':self.classes[cl][1][n]}
+
+ 	def getNumElementsByClass(self,cl):
+ 		return  len(self.classes[cl][0])
 	
 	def getElements(self,x,num=False):
 		lst = []
@@ -225,8 +228,15 @@ class Validator(object):
 				if result != None:
 					votes[result] += 1
 			return votes
-		else:
-			pass
+		elif type == None:
+
+			for el in range(0,self.holder.getNumElementsByClass(index)):
+				x = self.holder.getElement(index,el)
+				self.holder.setPoint(x['x'],x['y'])
+				result = self.holder.classifier(self.classifiers[self.index],limit)
+				if result != None:
+					votes[result] += 1
+			return votes
 			"""  
 				iterate over all class to count votes
 				implement getNumElements(Class) in order to use it in a for loop
