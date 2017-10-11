@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from generator import ClassGenerator
 from generator import ClassHolder
-from Clasifier import EculedianDistance
+from Clasifier import EuclideanDistance
 from Clasifier import Mahalanobis
 from Clasifier import MaxProbability
 
-classifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]
+classifiers = [EuclideanDistance(),Mahalanobis(),MaxProbability()]
 
 class MyWindow(Gtk.Window):
 

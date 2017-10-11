@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from generator import ClassGenerator
 from generator import ClassHolder
 from generator import Validator
-from Clasifier import EculedianDistance
+from Clasifier import EuclideanDistance
 from Clasifier import KNN
 
 if __name__ == '__main__':

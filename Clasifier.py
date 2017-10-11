@@ -3,7 +3,7 @@ from math import sqrt,pow,pi,exp
 from numpy.linalg import inv,det
 
 def average(numArray):
-		res = np.zeros( (numArray.ndim,1) )
+		res = np.zeros( (numArray.shape[0],1) )
 		index = 0
 		for dim in numArray:
 			avg = 0.0
@@ -14,18 +14,25 @@ def average(numArray):
 			index += 1
 		return res
 
-
-class EculedianDistance(object):
+class EuclideanDistance(object):
 	"""docstring for eculedianDistance"""
 	def __init__(self):
-		super(EculedianDistance, self).__init__()
+		super(EuclideanDistance, self).__init__()
 
 	def distance(self,x,c):
 		avg = average(c)
-		return sqrt(pow(x[0]-avg[0],2)+pow(x[1]-avg[1],2))
+		tmp = 0.0
+		if avg.shape[0] == x.shape[0]:
+			for i in range(0,x.shape[0]):
+				tmp += pow(x[i]-avg[i],2)
+		return sqrt(tmp)
 
 	def distanceToPoint(self,x,c,_class=None):
-		return sqrt(pow(x[0]-c[0],2)+pow(x[1]-c[1],2))
+		tmp = 0.0
+		if c.shape[0] == x.shape[0]:
+			for i in range(0,x.shape[0]):
+				tmp += pow(x[i]-c[i],2)
+		return sqrt(tmp)
 
 class Mahalanobis(object):
 	"""docstring for mahalanobis"""
@@ -93,7 +100,7 @@ class KNN(object):
 	def __init__(self,k=3, index=0):
 		super(KNN, self).__init__()
 		self.k = k
-		self.clasifiers = [EculedianDistance(),Mahalanobis(),MaxProbability()]
+		self.clasifiers = [EuclideanDistance(),Mahalanobis(),MaxProbability()]
 		self.index = index
 
 	def keywithmaxval(self,d):
@@ -107,8 +114,11 @@ class KNN(object):
 		index = 0
 		
 		for cl in range(0,len(_classes)):
-			for dim in range(0,_classes[cl].size/_classes[cl].ndim):
-				p = np.array([[_classes[cl][0][dim]],[_classes[cl][1][dim]]])
+			for dim in range(0,_classes[cl].shape[1]):
+				tmp_list = []
+				for axis in range(0,_classes[cl].shape[0]):
+					tmp_list.append([_classes[cl][axis][dim]])
+				p = np.array(tmp_list)
 				#print p
 				temp = {"distance":self.clasifiers[self.index].distanceToPoint( x,p,_classes[cl]),"class":cl,"index":index}
 				lst.append( temp)

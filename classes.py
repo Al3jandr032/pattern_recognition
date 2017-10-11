@@ -3,16 +3,14 @@ from math import sqrt,pow
 import matplotlib.pyplot as plt
 
 classes = []
-classes.append(np.array([[1,3,1,2,3],[2,5,5,2,3]]))
-classes.append(np.array([[6,6,7,8,8],[4,3,4,4,5]]))
-classes.append(np.array([[10,12,10,15,10],[11,11,13,14,12]]))
-classes.append(np.array([[1,3,1,2,3],[11,8,10,8,9]]))
-classes.append(np.array([[6,6,7,8,8],[8,10,12,7,8]]))
+classes.append(np.array([[1,3,1,2,3],[2,5,5,2,3],[2,5,5,2,3]]))
+classes.append(np.array([[6,6,7,8,8],[4,3,4,4,5],[2,5,5,2,3]]))
+classes.append(np.array([[10,12,10,15,10],[11,11,13,14,12],[2,5,5,2,3]]))
+classes.append(np.array([[1,3,1,2,3],[11,8,10,8,9],[2,5,5,2,3]]))
+classes.append(np.array([[6,6,7,8,8],[8,10,12,7,8],[2,5,5,2,3]]))
  
-
-
 def average(numArray):
-	res = np.zeros( (numArray.ndim,1) )
+	res = np.zeros( (numArray.shape[0],1) )
 	index = 0
 	for dim in numArray:
 		avg = 0.0
@@ -23,14 +21,18 @@ def average(numArray):
 		index += 1
 	return res
 
-def eculedianDistance(avg1,avg2):
-	return sqrt(pow(avg1[0]-avg2[0],2)+pow(avg1[1]-avg2[1],2))
+def EuclideanDistance(avg1,avg2):
+	tmp = 0.0
+	if avg1.shape[0] == avg2.shape[0]:
+		for x in range(0,avg2.shape[0]):
+			tmp += pow(avg1[x]-avg2[x],2)
+	return sqrt(tmp)
 
 def classifier(_classes,x,limit):
 	lst = [	]
 	index = 0
 	for i in _classes:
-		temp = {"avg":eculedianDistance( x,average(i) ),"class":i,"index":index}
+		temp = {"avg":EuclideanDistance( x,average(i) ),"class":i,"index":index}
 		lst.append( temp)
 		index += 1
 	lst.sort(key=lambda x: x['avg'], reverse=False)
@@ -45,16 +47,17 @@ def classifier(_classes,x,limit):
 
 if __name__ == '__main__':
 	colors = ['magenta', 'black', 'blue', 'brown', 'green']
-	x = raw_input("Coordenada x: ")
-	y = raw_input("Coordenada y: ")
-	p = np.array([[int(x)],[int(y)]])
-	limit = raw_input("Limite : ")
+	x = 1
+	y = 1
+	z = 1
+	p = np.array([[int(x)],[int(y)],[int(z)]])
+	limit = 20
 	#print p
 	#for _class in classes:
 	#	print eculedianDistance(p,average(_class))
 	result = classifier(classes, p,limit)
 	print "\n\n result belong to class {}".format(result)
-	
+	"""
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	index = 0
@@ -76,3 +79,4 @@ if __name__ == '__main__':
 	#ax.set_ylim(0, 15)
 	
 	plt.show()
+	"""

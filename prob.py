@@ -6,7 +6,7 @@ from numpy.linalg import inv,det
 import matplotlib.pyplot as plt
 from generator import ClassGenerator
 from generator import ClassHolder
-from Clasifier import EculedianDistance
+from Clasifier import EuclideanDistance
 
 
 def average(numArray):

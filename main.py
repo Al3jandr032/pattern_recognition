@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from generator import ClassGenerator
 from generator import ClassHolder
-from Clasifier import EculedianDistance
+from Clasifier import EuclideanDistance
 from Clasifier import Mahalanobis
 from Clasifier import MaxProbability
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 		x = raw_input("Coordenada x: ")
 		y = raw_input("Coordenada y: ")
 		#l = raw_input("Limite : ")
-		if holder.classify(MaxProbability(),x,y,100):
+		if holder.classify(EuclideanDistance(),x,y,100):
 			plt.show()
 	else:
  		print "Filename required"

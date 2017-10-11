@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
-from Clasifier import EculedianDistance
+from Clasifier import EuclideanDistance
 from Clasifier import Mahalanobis
 from Clasifier import MaxProbability
 from Clasifier import KNN
@@ -96,7 +96,7 @@ class ClassHolder(object):
 		return lst
 					
 	def average(self,numArray):
-		res = np.zeros( (numArray.ndim,1) )
+		res = np.zeros( (numArray.shape[0],1) )
 		index = 0
 		for dim in numArray:
 			avg = 0.0
@@ -206,7 +206,7 @@ class Validator(object):
 	def __init__(self, holder, index):
 		super(Validator, self).__init__()
 		self.holder = holder
-		self.classifiers =  [EculedianDistance(),Mahalanobis(),MaxProbability(),KNN()]
+		self.classifiers =  [EuclideanDistance(),Mahalanobis(),MaxProbability(),KNN()]
 		self.index = index
 
 	def sample(self,index,type=False,cl=None):
