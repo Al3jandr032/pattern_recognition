@@ -3,6 +3,7 @@
 import Tkinter
 import tkMessageBox
 from PIL import Image, ImageTk
+import struct
 import sys
 import numpy as np
 from classholder import ClassHolder
@@ -52,8 +53,26 @@ if __name__ == "__main__":
 				classList.addClass(_class)
 				
 			for i in range(0,classList.getNumClasses()):
-				print classList.average(classList.getClass(i))	
+				avg = classList.average(classList.getClass(i))
+				print avg
+				color = (avg[0],avg[1],avg[2])
+				print "clase : ",i,
+				print ' #'+struct.pack("BBB",*color).encode('hex')
+
 			plist = pix[points[30]['x'],points[30]['y']]
 			classList.classify(KNN(),plist[0:3],-1)
+			"""
+			fig = plt.figure()
+			ax = fig.add_subplot(111)
+			rect1 = matplotlib.patches.Rectangle((-200,0), 200, 200, color='yellow')
+			rect2 = matplotlib.patches.Rectangle((0,0), 200, 200, color='red')
+			rect3 = matplotlib.patches.Rectangle((200,0), 200, 200, color='#0099FF')
+			ax.add_patch(rect1)
+			ax.add_patch(rect2)
+			ax.add_patch(rect3)
+			plt.xlim([-400, 400])
+			plt.ylim([-400, 400])
+			plt.show()
+			"""
 	else:
 		print "uso : {} <file>".format(sys.argv[0])

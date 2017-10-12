@@ -103,10 +103,10 @@ class ClassHolder():
 		#	print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])
 		#print lst[0]['avg']," : ",limit
 		
-		return lst[0]['index']
+		return lst[0]['index']+1
 
 	def classify(self,classifierObject,points,limit):
 		result = self.classifier(classifierObject,points,limit)
 		if result != None:
 			print "pertenece a la clase : {} ".format(result)
-		return
+		return result
