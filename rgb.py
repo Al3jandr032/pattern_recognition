@@ -30,7 +30,7 @@ classList = ClassHolder()
 
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
-		
+
 		im = Image.open(sys.argv[1])
 		canvas = Tkinter.Canvas(window, width=im.size[0], height=im.size[1])
 		canvas.pack()
@@ -51,12 +51,12 @@ if __name__ == "__main__":
 					holder[2].append(rgb[2])
 				_class = np.array(holder)
 				classList.addClass(_class)
-				
+
 			for i in range(0,classList.getNumClasses()):
 				avg = classList.average(classList.getClass(i))
 				print avg
 				color = (avg[0],avg[1],avg[2])
-				print "clase : ",i,
+				print "clase : ",i+1,
 				print ' #'+struct.pack("BBB",*color).encode('hex')
 
 			plist = pix[points[30]['x'],points[30]['y']]
