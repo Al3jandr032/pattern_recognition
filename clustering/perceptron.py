@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-import sys
 import numpy as np
-import pandas as pd
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class Perceptron(object):
     """docstring for Perceptron."""
@@ -47,6 +46,11 @@ class Perceptron(object):
         while(end):
             if not self.__processData():
                 end = False
+        return self.w
+
+# Función lineal.
+def fl(x):
+    return 1/2-x
 
 if __name__ == '__main__':
     data  = []
@@ -56,4 +60,13 @@ if __name__ == '__main__':
     data.append(np.array([1,1,1]))
     p = Perceptron(data)
     p.show()
-    p.process()
+    result = p.process()
+    print result
+    x = [0,0,1,1,2]
+    y = [0,1,0,1,2]
+    plt.plot(x,y, 'ro')
+    x = [x for x in range(-1,1)]
+    plt.plot(x, [fl(i) for i in x])
+    plt.axis([-2, 2.5, -2, 3.5])
+    plt.show()
+
