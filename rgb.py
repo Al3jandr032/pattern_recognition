@@ -17,11 +17,11 @@ points = []
 def callback(event):
 		#print "clicked at: ", event.x, event.y
 		points.append({'x':event.x,'y':event.y})
-		if(len(points)%10 == 0 and len(points) < 30):
+		if(len(points)%1 == 0 and len(points) < 3):
 			tkMessageBox.showinfo("Mensaje", "Has seleccionado : "+str(len(points))+"muestras")
-		if(len(points) == 30):
+		if(len(points) == 3):
 			tkMessageBox.showinfo("Mensaje", "Has seleccionado : "+str(len(points))+" muestras, ahora selecciona la muestra a clasificar")
-		elif(len(points) > 30):
+		elif(len(points) > 3):
 			globals()['window'].destroy()
 
 window = Tkinter.Tk(className="Image")
@@ -30,7 +30,7 @@ classList = ClassHolder()
 
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
-
+		disp = raw_input("dispersion : ")
 		im = Image.open(sys.argv[1])
 		canvas = Tkinter.Canvas(window, width=im.size[0], height=im.size[1])
 		canvas.pack()
@@ -41,16 +41,20 @@ if __name__ == "__main__":
 		image = Image.open(sys.argv[1])
 		pix = image.load()
 		 #Get the RGBA Value of the a pixel of an image
-		if(len(points) == 31):
+		if(len(points) == 4):
 			for c in range(0,3):
 				holder = [[],[],[]]
-				for i in range(0+(10*c),10+(10*c)):
+				for i in range(0+(1*c),1+(1*c)):
 					rgb = pix[points[i]['x'],points[i]['y']]
 					holder[0].append(rgb[0])
 					holder[1].append(rgb[1])
 					holder[2].append(rgb[2])
-				_class = np.array(holder)
-				classList.addClass(_class)
+				tmp =  np.random.rand(3, 10)
+				tmp[0] = float(disp)*tmp[0]+float(rgb[0])
+				tmp[1] = float(disp)*tmp[1]+float(rgb[1])
+				tmp[2] = float(disp)*tmp[2]+float(rgb[2])
+				print tmp
+				classList.addClass(tmp)
 
 			for i in range(0,classList.getNumClasses()):
 				avg = classList.average(classList.getClass(i))
@@ -59,7 +63,7 @@ if __name__ == "__main__":
 				print "clase : ",i+1,
 				print ' #'+struct.pack("BBB",*color).encode('hex')
 
-			plist = pix[points[30]['x'],points[30]['y']]
+			plist = pix[points[3]['x'],points[3]['y']]
 			classList.classify(KNN(),plist[0:3],-1)
 			"""
 			fig = plt.figure()
