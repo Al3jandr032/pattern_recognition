@@ -49,8 +49,8 @@ class Perceptron(object):
         return self.w
 
 # Función lineal.
-def fl(x):
-    return 1/2-x
+def fx(x):
+    return 0.5-x
 
 if __name__ == '__main__':
     data  = []
@@ -62,11 +62,11 @@ if __name__ == '__main__':
     p.show()
     result = p.process()
     print result
-    x = [0,0,1,1,2]
-    y = [0,1,0,1,2]
+    print 1," ",fx(0)
+    #print 1," ",fl(0.5)
+    x = [0,0,1,1,0,0.5]
+    y = [0,1,0,1,0.5,0]
     plt.plot(x,y, 'ro')
-    x = [x for x in range(-1,1)]
-    plt.plot(x, [fl(i) for i in x])
     plt.axis([-2, 2.5, -2, 3.5])
     plt.show()
 
