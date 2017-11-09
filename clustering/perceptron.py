@@ -36,7 +36,7 @@ class Perceptron(object):
                     print " clase 2 cambio"
                     change = True
                     self.w =self.__maxFit(i)
-                    print self.w
+                    print "valor de w : ",self.w
         print "##### fin de iteracion  ######"
         return change
 
@@ -70,4 +70,3 @@ if __name__ == '__main__':
     plt.plot(x,y, 'ro')
     plt.axis([-2, 2.5, -2, 3.5])
     plt.show()
-

@@ -9,20 +9,21 @@ from mpl_toolkits.mplot3d import Axes3D
 if __name__ == '__main__':
     data  = []
     data.append(np.array([0,0,0,1]))
-    data.append(np.array([1,0,0,1]))
-    data.append(np.array([1,1,0,1]))
-    data.append(np.array([1,0,1,1]))
-
     data.append(np.array([0,0,1,1]))
-    data.append(np.array([0,1,1,1]))
     data.append(np.array([0,1,0,1]))
+    data.append(np.array([0,1,1,1]))
+
     data.append(np.array([1,1,1,1]))
+    data.append(np.array([1,1,0,1]))
+    data.append(np.array([1,0,0,1]))
+    data.append(np.array([1,0,1,1]))
     p = Perceptron(data,pivot=4,d=4)
     p.show()
     w = p.process()
     w = np.divide(w,np.absolute(w[0]))
     print "resultado : {}".format(w)
     print "Z={}X+{}Y+{}".format(-1*w[0],-1*w[1],-1*w[3])
+
 
     # Plot logic
     fig = plt.figure()
