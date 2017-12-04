@@ -66,11 +66,8 @@ class ClassHolder():
 		return res
 
 	def classifier(self,classifierObject,points,limit):
-		tmp = []
-		for element in points:
-			tmp.append([float(element)])
-		x = np.array(tmp)
-		print x
+		x = np.array(points)
+		#print x
 		lst = [	]
 		index = 0
 		#print len(self.classes)
@@ -79,7 +76,7 @@ class ClassHolder():
 		else:
 			for i in self.classes:
 				temp = {"distance":classifierObject.distance( x,i ),"class":i,"index":index}
-				print temp
+				#print temp
 				lst.append( temp)
 				index += 1
 			if isinstance(classifierObject, MaxProbability):
@@ -91,7 +88,7 @@ class ClassHolder():
 				for i in lst:
 					i['distance'] = (i['distance']/total)*100
 				lst.sort(key=lambda x: x['distance'], reverse=True	)
-				print lst
+				#print lst
 			else:
 				lst.sort(key=lambda x: x['distance'], reverse=False	)
 				if int(limit) != -1:
