@@ -40,5 +40,5 @@ def test():
 		print "%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 #holder.classify(MaxProbability(),0,0,20)
 test()
-end = raw_input("terminar enter")
+
 

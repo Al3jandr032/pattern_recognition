@@ -57,11 +57,8 @@ class Mahalanobis(object):
 
 	def distanceToPoint(self,p,c,_class):
 		covarianza = self.covariantMatrix(_class)
-		#print "matriz covarianza :",covarianza.shape
 		xminusAvg = p-c
-		#print "x menos el promedio :",xminusAvg.shape
 		tmp = np.dot(covarianza,xminusAvg)
-		#print "tmp :",tmp.shape
 		aux = np.dot(xminusAvg.transpose(),tmp)
 		return aux
 
@@ -91,12 +88,10 @@ class MaxProbability(object):
 		xminusAvg = p-average(c)
 		tmp = np.dot(covarianza,xminusAvg)
 		mahalanubis= np.dot(xminusAvg.transpose(),tmp)
-		print mahalanubis[0][0]," : d shape",
 		a = exp(mahalanubis[0][0]*-0.5)
 		b = pow(pi*2,float(3/2))
 		c = det(covarianza)
 		d = a/pow(c,-0.5)*b
-		print d
 		return d
 
 

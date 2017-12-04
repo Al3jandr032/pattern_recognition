@@ -52,6 +52,7 @@ class MaxProbability(object):
 		b = pow(pi*2,float(c.ndim/2))
 		c = det(covarianza)
 		d = a/pow(c,-0.5)*b
+		print "P :",d
 		return d
 
 numPopulation=100	

@@ -1,5 +1,5 @@
 import numpy as np 
-from math import sqrt,pow
+from math import sqrt,pow,isnan
 import random
 from Clasifier import EuclideanDistance
 from Clasifier import KNN
@@ -74,21 +74,26 @@ class ClassHolder():
 		if isinstance(classifierObject, KNN):
 			return classifierObject.distance( x,self.classes)
 		else:
+			
 			for i in self.classes:
+				
 				temp = {"distance":classifierObject.distance( x,i ),"class":i,"index":index}
-				#print temp
+				#print "classifier distance :", temp['distance']," :",temp['index']
 				lst.append( temp)
 				index += 1
 			if isinstance(classifierObject, MaxProbability):
 				total = 0.0
 				for i in lst:
-					total += i['distance']
-				#print total
+					if not isnan(i['distance']):
+						total += i['distance']
+						print "total {} + {}".format(total,i['distance'])
+				print total
 				
 				for i in lst:
-					i['distance'] = (i['distance']/total)*100
+					if total > 0:
+						i['distance'] = (i['distance']/total)*100
+					
 				lst.sort(key=lambda x: x['distance'], reverse=True	)
-				#print lst
 			else:
 				lst.sort(key=lambda x: x['distance'], reverse=False	)
 				if int(limit) != -1:
@@ -105,5 +110,6 @@ class ClassHolder():
 	def classify(self,classifierObject,points,limit):
 		result = self.classifier(classifierObject,points,limit)
 		if result != None:
+			#pass
 			print "pertenece a la clase : {} ".format(result)
 		return result
