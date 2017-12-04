@@ -64,8 +64,7 @@ class Group(object):
         self.mean = self.getMean()
 
 def processData(umbral,g):
-    print "tamaño de g :",len(g)
-    cont = 0
+    print "Numero de clases :  ",(len(g)-1)
     for i in range(0,len(g)-1):
         dist = euclidean.distance(g[i].getMean(),g[i+1].getMean())
         #print dist
@@ -79,10 +78,8 @@ def processData(umbral,g):
             else:
                 g[i+1].setDelete()
             g[i].addPoints(g[i+1].getPoints())
-        else:
-            cont += 1
             #print dist
-    print "Eliminados ",cont
+    
     return [x for x in g if not x.getDelete()]
 
 if __name__ == '__main__':
@@ -92,8 +89,8 @@ if __name__ == '__main__':
         im = Image.open(sys.argv[1])
         pix = im.load()
         
-        for i in range(0,im.size[0],100):
-            for j in range(0,im.size[1],100):
+        for i in range(0,im.size[0],50):
+            for j in range(0,im.size[1],50):
                 aux = Group(pix[i,j])
                 #print aux.getPoints()
                 g.append(aux)
@@ -114,13 +111,14 @@ if __name__ == '__main__':
             while(kpg):
                 origin_size = len(aux)
                 print "######## Starting process ##################"
-                print origin_size
+                #print origin_size
                 aux = processData(umbral,aux)
                 if len(aux) == origin_size:
                     kpg = False
                 print len(aux)
                 if len(aux) < 5:
                     break
+            print "numero de clases : ",len(aux)-2
             """
             for group in g:
                 print group.getPoints()
