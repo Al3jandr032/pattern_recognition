@@ -110,6 +110,6 @@ class ClassHolder():
 	def classify(self,classifierObject,points,limit):
 		result = self.classifier(classifierObject,points,limit)
 		if result != None:
-			#pass
-			print "pertenece a la clase : {} ".format(result)
+			pass
+			#print "pertenece a la clase : {} ".format(result)
 		return result
