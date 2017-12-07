@@ -44,8 +44,8 @@ class FileChooserWindow(Gtk.Window):
         print ceps
         arraylist = []
         for i in ceps:
-            #print type(i)
-            arraylist.append([i[0]])
+            for elem in i:
+                arraylist.append([elem])
         print arraylist
 
     def on_file_clicked(self, widget):
