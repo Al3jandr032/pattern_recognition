@@ -5,10 +5,11 @@ import matplotlib.pyplot as plt
 
 class Perceptron(object):
     """docstring for Perceptron."""
-    def __init__(self,data,r=1):
+    def __init__(self,data,pivot=1,d=3,r=1):
         self.r = r
-        self.w = np.ones(3)
+        self.w = np.ones(d)
         self.data = data
+        self.pivot = pivot
 
     def show(self):
         print self.data
@@ -22,22 +23,20 @@ class Perceptron(object):
     def __processData(self):
         change = False
         for i in range(0,len(self.data)):
-            if i == 0:
-                fsal = np.dot(self.data[i], self.w)
-                print fsal
+            fsal = np.dot(self.data[i], self.w)
+            print fsal
+            if i < self.pivot:
                 if fsal >= 0:
                     print "cambio"
                     change = True
                     self.w =self.__minFit(i)
                     print self.w
             else:
-                fsal = np.dot(self.data[i], self.w)
-                print fsal
                 if fsal <= 0:
                     print " clase 2 cambio"
                     change = True
                     self.w =self.__maxFit(i)
-                    print self.w
+                    print "valor de w : ",self.w
         print "##### fin de iteracion  ######"
         return change
 
@@ -48,9 +47,11 @@ class Perceptron(object):
                 end = False
         return self.w
 
+
 # Función lineal.
-def fl(x):
-    return 1/2-x
+def fx(x):
+    return 0.5-x
+
 
 if __name__ == '__main__':
     data  = []
@@ -62,11 +63,10 @@ if __name__ == '__main__':
     p.show()
     result = p.process()
     print result
-    x = [0,0,1,1,2]
-    y = [0,1,0,1,2]
+    print 1," ",fx(0)
+    #print 1," ",fl(0.5)
+    x = [0,0,1,1,0,0.5]
+    y = [0,1,0,1,0.5,0]
     plt.plot(x,y, 'ro')
-    x = [x for x in range(-1,1)]
-    plt.plot(x, [fl(i) for i in x])
     plt.axis([-2, 2.5, -2, 3.5])
     plt.show()
-

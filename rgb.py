@@ -19,9 +19,9 @@ def callback(event):
 		points.append({'x':event.x,'y':event.y})
 		if(len(points)%1 == 0 and len(points) < 3):
 			tkMessageBox.showinfo("Mensaje", "Has seleccionado : "+str(len(points))+"muestras")
-		if(len(points) == 3):
+		if(len(points) == 5):
 			tkMessageBox.showinfo("Mensaje", "Has seleccionado : "+str(len(points))+" muestras, ahora selecciona la muestra a clasificar")
-		elif(len(points) > 3):
+		elif(len(points) > 5):
 			globals()['window'].destroy()
 
 window = Tkinter.Tk(className="Image")
@@ -30,7 +30,7 @@ classList = ClassHolder()
 
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
-		disp = raw_input("dispersion : ")
+		disp = [25,20,30,25,40]
 		im = Image.open(sys.argv[1])
 		canvas = Tkinter.Canvas(window, width=im.size[0], height=im.size[1])
 		canvas.pack()
@@ -41,8 +41,8 @@ if __name__ == "__main__":
 		image = Image.open(sys.argv[1])
 		pix = image.load()
 		 #Get the RGBA Value of the a pixel of an image
-		if(len(points) == 4):
-			for c in range(0,3):
+		if(len(points) == 6):
+			for c in range(0,5):
 				holder = [[],[],[]]
 				for i in range(0+(1*c),1+(1*c)):
 					rgb = pix[points[i]['x'],points[i]['y']]
@@ -50,9 +50,9 @@ if __name__ == "__main__":
 					holder[1].append(rgb[1])
 					holder[2].append(rgb[2])
 				tmp =  np.random.rand(3, 10)
-				tmp[0] = float(disp)*tmp[0]+float(rgb[0])
-				tmp[1] = float(disp)*tmp[1]+float(rgb[1])
-				tmp[2] = float(disp)*tmp[2]+float(rgb[2])
+				tmp[0] = float(disp[i])*tmp[0]+float(rgb[0])
+				tmp[1] = float(disp[i])*tmp[1]+float(rgb[1])
+				tmp[2] = float(disp[i])*tmp[2]+float(rgb[2])
 				print tmp
 				classList.addClass(tmp)
 
