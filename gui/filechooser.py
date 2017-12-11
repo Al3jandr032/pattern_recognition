@@ -5,6 +5,8 @@ import os
 import numpy as np
 from scipy.io import wavfile as w
 from scikits.talkbox.features import mfcc
+from  pattern.music import MusicGenClass as musicClasifier
+
 
 
 def create_ceps(fn):
@@ -21,6 +23,9 @@ class FileChooserWindow(Gtk.Window):
         self.set_border_width(10)
         self.set_default_size(400, 200)
         self.filename = None
+        self.classvector = None
+        self.dataset = musicClasifier(path="/home/aletz/repos/pattern_recognition/proyecto")
+        self.genlist = ['electro' ,'metal','pop','rock']
 
         box = Gtk.Box(spacing=6)
         self.add(box)
@@ -37,7 +42,7 @@ class FileChooserWindow(Gtk.Window):
         button_process = Gtk.Button("Process")
         button_process.connect("clicked", self.on_proces_clicked)
         box.add(button_process)
-       
+
     def on_proces_clicked(self,widget):
         print "on_proces_clicked"
         ceps = create_ceps(self.filename)
@@ -46,7 +51,14 @@ class FileChooserWindow(Gtk.Window):
         for i in ceps:
             for elem in i:
                 arraylist.append([elem])
-        print arraylist
+        self.classvector = arraylist
+        res = self.dataset.process(self.classvector)
+        print self.genlist[res-1]
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.OK, "This song belong to {}".format(self.genlist[res-1]))
+        dialog.run()
+        print("INFO dialog closed")
+        dialog.destroy()
 
     def on_file_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Please choose a file", self,
@@ -68,21 +80,16 @@ class FileChooserWindow(Gtk.Window):
 
     def add_filters(self, dialog):
         filter_text = Gtk.FileFilter()
-        filter_text.set_name("Text files")
-        filter_text.add_mime_type("text/plain")
+        filter_text.set_name("Wav Files")
+        filter_text.add_mime_type("audio/wav")
         dialog.add_filter(filter_text)
-
-        filter_py = Gtk.FileFilter()
-        filter_py.set_name("Python files")
-        filter_py.add_mime_type("text/x-python")
-        dialog.add_filter(filter_py)
 
         filter_any = Gtk.FileFilter()
         filter_any.set_name("Any files")
         filter_any.add_pattern("*")
         dialog.add_filter(filter_any)
 
-    
+
 
 win = FileChooserWindow()
 win.connect("delete-event", Gtk.main_quit)
