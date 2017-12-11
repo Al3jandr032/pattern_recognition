@@ -1,6 +1,8 @@
-import numpy as np 
+import os
+import numpy as np
 from math import sqrt,pow
 import random
+import h5py
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from configparser import ConfigParser
@@ -30,6 +32,7 @@ class ClassGenerator(object):
 				tmp =  np.random.randn(2, self.size)
 				tmp[0] = float(d)*tmp[0]+float(x)
 				tmp[1] = float(d)*tmp[1]+float(y)
+				print tmp.shape
 				lst.append(tmp)
 		else:
 			for i in xrange(0,self.n):
@@ -41,6 +44,33 @@ class ClassGenerator(object):
 				tmp[1] = float(d)*tmp[1]+float(y)
 				lst.append(tmp)
 		return lst
+
+class h5fGenerator(ClassGenerator):
+	"""docstring for h5fGenerator"""
+	def __init__(self,config_path=None ):
+		super(ClassGenerator, self).__init__()
+		self.config_path = config_path
+		
+		
+	def load(self):
+		print self.config_path
+		lst = []
+		gen_file_list = ['electro.h5' ,'metal.h5','pop.h5','rock.h5']
+		for file in gen_file_list:
+			filename = os.path.join( self.config_path, file)
+			print filename
+			tmp = None
+			with h5py.File(filename, 'r') as h5f:
+				
+				for k in h5f.keys():
+					if tmp is None:
+						tmp = h5f[k][:]
+					else:
+						tmp = np.vstack([tmp,h5f[k][:]])
+				lst.append(np.swapaxes(tmp[:50],0,1))
+				
+		return lst
+		
 
 class ClassHolder(object):
 	"""docstring for ClassHolder"""
@@ -108,8 +138,11 @@ class ClassHolder(object):
 		return res
 
 	""" compara un vector para determinar a que clase pertence"""
-	def classifier(self,classifierObject,limit):
-		x = np.array([[float(self._x)],[float(self._y)]])
+	def classifier(self,classifierObject,limit,classvector=None):
+		if classvector is not None:
+			x = classvector
+		else:
+			x = np.array([[float(self._x)],[float(self._y)]])
 		lst = [	]
 		index = 0
 		#print len(self.classes)
@@ -170,10 +203,10 @@ class ClassHolder(object):
 		#a = animation.FuncAnimation(self.fig, self.update, interval=2000,frames=100)
 		figplot.show()
 
-	def classify(self,classifierObject,x,y,limit):
+	def classify(self,classifierObject,x,y,limit,vclass = None):
 		self._x = x
 		self._y = y
-		result = self.classifier(classifierObject,limit)
+		result = self.classifier(classifierObject,limit,vclass)
 		if result != None:
 			print "pertenece a la clase : {} ".format(result)
 		#figure plot logic

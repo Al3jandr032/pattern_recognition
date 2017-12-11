@@ -23,14 +23,14 @@ class EuclideanDistance(object):
 		avg = average(c)
 		tmp = 0.0
 		if avg.shape[0] == x.shape[0]:
-			for i in range(0,x.shape[0]):
+			for i in xrange(x.shape[0]):
 				tmp += pow(x[i]-avg[i],2)
 		return sqrt(tmp)
 
 	def distanceToPoint(self,x,c,_class=None):
 		tmp = 0.0
 		if c.shape[0] == x.shape[0]:
-			for i in range(0,x.shape[0]):
+			for i in xrange(c.shape[0]):
 				tmp += pow(x[i]-c[i],2)
 		return sqrt(tmp)
 
@@ -44,8 +44,8 @@ class Mahalanobis(object):
 		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
 	def divBy(self,d,n):
-		for x in range(0,len(d)):
-			for i in range(0,len(d[x])):
+		for x in range(d.shape[0]):
+			for i in range(d.shape[1]):
 				d[x][i]=float(d[x][i])/float(n)
 		return d
 
@@ -59,7 +59,8 @@ class Mahalanobis(object):
 		covarianza = self.covariantMatrix(_class)
 		xminusAvg = p-c
 		tmp = np.dot(covarianza,xminusAvg)
-		return np.dot(xminusAvg.transpose(),tmp)
+		aux = np.dot(xminusAvg.transpose(),tmp)
+		return aux
 
 class MaxProbability(object):
 	"""docstring for MaxProbability"""
@@ -71,14 +72,14 @@ class MaxProbability(object):
 		return self.divBy(np.dot(_sum,_sum.transpose()),len(_sum[0]))
 
 	def divBy(self,d,n):
-		for x in range(0,len(d)):
-			for i in range(0,len(d[x])):
+		for x in range(d.shape[0]):
+			for i in range(d.shape[1]):
 				d[x][i]=float(d[x][i])/float(n)
 		return d
 
 	def divBy2(self,d,n):
-		for x in range(0,len(d)):
-			for i in range(0,len(d[x])):
+		for x in xrange(d.shape[0]):
+			for i in xrange(d.shape[1]):
 				d[x][i]=-1*float(d[x][i])/2
 		return d
 
@@ -87,7 +88,6 @@ class MaxProbability(object):
 		xminusAvg = p-average(c)
 		tmp = np.dot(covarianza,xminusAvg)
 		mahalanubis= np.dot(xminusAvg.transpose(),tmp)
-		#print mahalanubis[0][0]
 		a = exp(mahalanubis[0][0]*-0.5)
 		b = pow(pi*2,float(3/2))
 		c = det(covarianza)
@@ -112,20 +112,21 @@ class KNN(object):
 		#print "knn-distance type of x: ",type(x)
 		lst = [	]
 		index = 0
-		
-		for cl in range(0,len(_classes)):
-			for dim in range(0,_classes[cl].shape[1]):
+		for cl in xrange(len(_classes)):
+			for dim in xrange(_classes[cl].shape[1]):
 				tmp_list = []
-				for axis in range(0,_classes[cl].shape[0]):
+				for axis in xrange(_classes[cl].shape[0]):
 					tmp_list.append([_classes[cl][axis][dim]])
 				p = np.array(tmp_list)
-				#print p
-				temp = {"distance":self.clasifiers[self.index].distanceToPoint( x,p,_classes[cl]),"class":cl,"index":index}
+				dis = self.clasifiers[self.index].distanceToPoint( x,p,_classes[cl])
+				
+				temp = {"distance":dis,"class":cl,"index":index}
+				#print temp
 				lst.append( temp)
 				index += 1
 		lst.sort(key=lambda x: x['distance'], reverse=False	)
 		knn = lst[:self.k]
-
+		#print knn
 		result = {}
 		for cl in knn:
 			#print "clase : {} , mean : {} ".format(cl['index']+1,cl['distance'])

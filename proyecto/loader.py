@@ -3,7 +3,7 @@
 
 import os
 import numpy as np
-import pandas as pd
+#import pandas as pd
 #import scip
 from scipy.io import wavfile as w
 #from matplotlib.pyplot import specgram
